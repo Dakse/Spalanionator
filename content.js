@@ -4,7 +4,6 @@ function extractDecimalsAsStrings(input) {
   return matches ? matches.map((m) => m.replace(",", ".")) : [];
 }
 async function getData() {
-  console.debug("eeee");
   let json = JSON.parse(
     document.querySelector("script[type='application/ld+json']").innerText
   );
@@ -15,8 +14,8 @@ async function getData() {
   const sidePanel = document.querySelector(
     "div[data-testid='ad-parameters-container']"
   );
-  // const loadingParam = createParam(`Ładowanie...`);
-  // sidePanel.append(loadingParam);
+  const loadingParam = createParam(`Ładowanie...`);
+  sidePanel?.append(loadingParam);
 
   let headers = new Headers();
 
@@ -61,12 +60,13 @@ async function getData() {
 
   if (!displacement || displacement === "NaN") {
     let decimal = extractDecimalsAsStrings(json.name)?.[0];
-    if (decimal) {
+    let decimalDesc = extractDecimalsAsStrings(json.description)?.[0];
+    if (decimal || decimalDesc) {
       console.debug(
         decimal,
-        "Extracted displacement from title - might not match"
+        "Extracted displacement from ad - might not match"
       );
-      displacement = decimal;
+      displacement = decimal || decimalDesc;
     }
   }
 
@@ -209,13 +209,13 @@ async function getData() {
   );
   const notFoundParam = createParam(`Nie znaleziono danych silnika :(`);
   setTimeout(() => {
-    //loadingParam.remove();
+    loadingParam.remove();
     if (engine) {
-      sidePanel.prepend(engineParam);
-      sidePanel.prepend(fuelParam);
-      sidePanel.prepend(costParam);
+      sidePanel.append(engineParam);
+      sidePanel.append(fuelParam);
+      sidePanel.append(costParam);
     } else {
-      sidePanel.prepend(notFoundParam);
+      sidePanel.append(notFoundParam);
     }
   }, 0);
 }
