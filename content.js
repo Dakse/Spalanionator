@@ -1,9 +1,10 @@
 function extractDecimalsAsStrings(input) {
   const regex = /\d+[.,]\d+/g;
   const matches = input.match(regex);
-  return matches ? matches.map(m => m.replace(',', '.')) : [];
+  return matches ? matches.map((m) => m.replace(",", ".")) : [];
 }
 async function getData() {
+  console.debug("eeee");
   let json = JSON.parse(
     document.querySelector("script[type='application/ld+json']").innerText
   );
@@ -14,8 +15,8 @@ async function getData() {
   const sidePanel = document.querySelector(
     "div[data-testid='ad-parameters-container']"
   );
-  const loadingParam = createParam(`Ładowanie...`);
-  sidePanel.append(loadingParam);
+  // const loadingParam = createParam(`Ładowanie...`);
+  // sidePanel.append(loadingParam);
 
   let headers = new Headers();
 
@@ -208,7 +209,7 @@ async function getData() {
   );
   const notFoundParam = createParam(`Nie znaleziono danych silnika :(`);
   setTimeout(() => {
-    loadingParam.remove();
+    //loadingParam.remove();
     if (engine) {
       sidePanel.prepend(engineParam);
       sidePanel.prepend(fuelParam);
@@ -224,6 +225,6 @@ window?.navigation.addEventListener("navigate", (event) => {
   }
 });
 
-// if (window.location.href.includes("https://www.olx.pl/d/oferta")) {
-//   getData();
-// }
+if (window.location.href.includes("https://www.olx.pl/d/oferta")) {
+  getData();
+}
