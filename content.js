@@ -4,6 +4,23 @@ function extractDecimalsAsStrings(input) {
   const matches = input.match(regex);
   return matches ? matches.map((m) => m.replace(",", ".")) : [];
 }
+
+async function addToStorage({ make, model, price, url, engine }) {
+  return; //DISABLED BY DEFAULT
+  await chrome.storage.local.get("cars", (result) => {
+    let cars = result.cars || {};
+    if (cars[url]) {
+      console.debug("Car already present");
+      return;
+    }
+    cars[url] = { make, model, price, url, engine };
+
+    chrome.storage.local.set({ cars: cars }, () => {
+      console.debug("Car added to storage");
+    });
+  });
+}
+
 async function getData() {
   try {
     if (active) return;
@@ -15,7 +32,7 @@ async function getData() {
     if (!json?.brand || !json?.model) {
       return;
     }
-    const sidePanel = document.querySelector(
+    var sidePanel = document.querySelector(
       "div[data-testid='ad-parameters-container']"
     );
     const loadingParam = createParam(`Ładowanie...`);
@@ -221,6 +238,13 @@ async function getData() {
         );
       }
       if (engine) {
+        await addToStorage({
+          make: json?.brand,
+          model: json?.model,
+          price: json?.offers?.price,
+          url: window.location.href,
+          engine: engine,
+        });
         sidePanel.append(engineParam);
         sidePanel.append(fuelParam);
         sidePanel.append(costParam);

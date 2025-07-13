@@ -6,7 +6,7 @@
   "version": "0.1",
 
   "action": {},
-  "permissions": ["pageCapture"],
+  "permissions": ["storage", "pageCapture"],
   "icons": { "48": "icons/48.png", "128": "icons/128.png" },
   "content_scripts": [
     {
