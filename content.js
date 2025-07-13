@@ -212,8 +212,14 @@ async function getData() {
       `Koszt przejechania 100km: <b>${engine?.fuelCost}</b>`
     );
     const notFoundParam = createParam(`Nie znaleziono danych silnika :(`);
-    setTimeout(() => {
+    setTimeout(async () => {
       loadingParam.remove();
+      if (!sidePanel) {
+        console.debug("Side panel not found,trying again");
+        sidePanel = await document.querySelector(
+          "div[data-testid='ad-parameters-container']"
+        );
+      }
       if (engine) {
         sidePanel.append(engineParam);
         sidePanel.append(fuelParam);
